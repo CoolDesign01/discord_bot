@@ -2,15 +2,13 @@ import os
 import discord
 import asyncio
 from discord.ext import commands, tasks
-
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from datetime import datetime, time
-import json
-import platform
 
 from myserver import server_on
 
-
-
+import json
+import platform
 
 # แก้ปัญหา Event Loop บน Windows
 if platform.system() == "Windows":
@@ -22,11 +20,6 @@ intents = discord.Intents.default()
 intents.message_content = True
 intents.members = True
 bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
-
-
-@bot.event
-async def on_ready():
-    print("bot Onlineแล้ว!")
 
 
 # โหลดและบันทึกข้อมูลใน config.json
@@ -158,8 +151,9 @@ async def on_message(message):
     await bot.process_commands(message)
 
 
-
 server_on()
 
-
+@bot.event
+async def on_ready():
+    print("bot Onlineแล้ว!")
 bot.run(os.getenv('TOKEN'))
